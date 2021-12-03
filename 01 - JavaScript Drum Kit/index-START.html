@@ -1,66 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>JS Drum Kit</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Drum Kit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="keys">
+      <div data-key="65" class="key">
+        <kbd>A</kbd>
+        <span class="sound">clap</span>
+      </div>
+      <div data-key="83" class="key">
+        <kbd>S</kbd>
+        <span class="sound">hihat</span>
+      </div>
+      <div data-key="68" class="key">
+        <kbd>D</kbd>
+        <span class="sound">kick</span>
+      </div>
+      <div data-key="70" class="key">
+        <kbd>F</kbd>
+        <span class="sound">openhat</span>
+      </div>
+      <div data-key="71" class="key">
+        <kbd>G</kbd>
+        <span class="sound">boom</span>
+      </div>
+      <div data-key="72" class="key">
+        <kbd>H</kbd>
+        <span class="sound">ride</span>
+      </div>
+      <div data-key="74" class="key">
+        <kbd>J</kbd>
+        <span class="sound">snare</span>
+      </div>
+      <div data-key="75" class="key">
+        <kbd>K</kbd>
+        <span class="sound">tom</span>
+      </div>
+      <div data-key="76" class="key">
+        <kbd>L</kbd>
+        <span class="sound">tink</span>
+      </div>
+    </div>
 
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/hihat.wav"></audio>
+    <audio data-key="68" src="sounds/kick.wav"></audio>
+    <audio data-key="70" src="sounds/openhat.wav"></audio>
+    <audio data-key="71" src="sounds/boom.wav"></audio>
+    <audio data-key="72" src="sounds/ride.wav"></audio>
+    <audio data-key="74" src="sounds/snare.wav"></audio>
+    <audio data-key="75" src="sounds/tom.wav"></audio>
+    <audio data-key="76" src="sounds/tink.wav"></audio>
 
-  <div class="keys">
-    <div data-key="65" class="key">
-      <kbd>A</kbd>
-      <span class="sound">clap</span>
-    </div>
-    <div data-key="83" class="key">
-      <kbd>S</kbd>
-      <span class="sound">hihat</span>
-    </div>
-    <div data-key="68" class="key">
-      <kbd>D</kbd>
-      <span class="sound">kick</span>
-    </div>
-    <div data-key="70" class="key">
-      <kbd>F</kbd>
-      <span class="sound">openhat</span>
-    </div>
-    <div data-key="71" class="key">
-      <kbd>G</kbd>
-      <span class="sound">boom</span>
-    </div>
-    <div data-key="72" class="key">
-      <kbd>H</kbd>
-      <span class="sound">ride</span>
-    </div>
-    <div data-key="74" class="key">
-      <kbd>J</kbd>
-      <span class="sound">snare</span>
-    </div>
-    <div data-key="75" class="key">
-      <kbd>K</kbd>
-      <span class="sound">tom</span>
-    </div>
-    <div data-key="76" class="key">
-      <kbd>L</kbd>
-      <span class="sound">tink</span>
-    </div>
-  </div>
+    <script>
+      // selectors
+      // select all keys
+      const keys = document.querySelectorAll('.key');
 
-  <audio data-key="65" src="sounds/clap.wav"></audio>
-  <audio data-key="83" src="sounds/hihat.wav"></audio>
-  <audio data-key="68" src="sounds/kick.wav"></audio>
-  <audio data-key="70" src="sounds/openhat.wav"></audio>
-  <audio data-key="71" src="sounds/boom.wav"></audio>
-  <audio data-key="72" src="sounds/ride.wav"></audio>
-  <audio data-key="74" src="sounds/snare.wav"></audio>
-  <audio data-key="75" src="sounds/tom.wav"></audio>
-  <audio data-key="76" src="sounds/tink.wav"></audio>
+      // callbacks
+      // listen to keyDowns
+      const playAndAddClass = (evt) => {
+        //console.log(evt.keyCode);
+        // select only the audio tag = to the key you press on the keyboard
+        // use attribute selector for this 'audio[data-key = evt.keyCode]'
+        const audio = document.querySelector(
+          `audio[data-key="${evt.keyCode}"]`
+        );
 
-<script>
+        // select only the div tag = to the key you press on the keyboard
+        const key = document.querySelector(`div[data-key="${evt.keyCode}"]`);
 
-</script>
+        // run the function only if the key = one of our keyCodes
+        if (!audio) return;
 
+        // rewind every time you click, basically don't wait for the audio to finish
+        audio.currentTime = 0;
 
-</body>
+        // play the audio if any audio is typed
+        audio.play();
+
+        // add class to style key when keyDown
+        key.classList.add('playing');
+      };
+
+      // I first thought I could use a keyUp event to remove the playing class
+      // This does not work if you have a long transition duration
+      // You basically do not see the transition at all because the keyUp is faster
+      /*
+      const keyUpListener = (evt) => {
+        // select only the div tag = to the key you press on the keyboard
+        const key = document.querySelector(`div[data-key="${evt.keyCode}"]`);
+
+        // run the function only if the key = one of our keyCodes
+        if (!key) return;
+
+        // remove class to style key when keyDown
+        key.classList.remove('playing');
+      };
+      */
+
+      // listeners
+      // listen for keyDowns to add playing class and play sound
+      window.addEventListener('keydown', playAndAddClass);
+
+      // keyUp does not show transition if transition duration is long
+      // window.addEventListener('keyup', keyUpListener);
+
+      // listen for transitionEnd to remove playing class
+      keys.forEach((key) =>
+        key.addEventListener('transitionend', (evt) => {
+          // wait only for transform transitions
+          if (evt.propertyName !== 'transform') return;
+          key.classList.remove('playing');
+        })
+      );
+    </script>
+  </body>
 </html>
