@@ -63,15 +63,15 @@
       // callbacks
       // listen to keyDowns
       const playAndAddClass = (evt) => {
-        //console.log(evt.keyCode);
-        // select only the audio tag = to the key you press on the keyboard
-        // use attribute selector for this 'audio[data-key = evt.keyCode]'
+        // select only the audio tag = to the key you press on the keyboard using attribute selector
         const audio = document.querySelector(
           `audio[data-key="${evt.keyCode}"]`
         );
 
         // select only the div tag = to the key you press on the keyboard
-        const key = document.querySelector(`div[data-key="${evt.keyCode}"]`);
+        const pressedKey = document.querySelector(
+          `div[data-key="${evt.keyCode}"]`
+        );
 
         // run the function only if the key = one of our keyCodes
         if (!audio) return;
@@ -83,7 +83,7 @@
         audio.play();
 
         // add class to style key when keyDown
-        key.classList.add('playing');
+        pressedKey.classList.add('playing');
       };
 
       // I first thought I could use a keyUp event to remove the playing class
