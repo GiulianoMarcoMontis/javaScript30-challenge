@@ -1,111 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Scoped CSS Variables and JS</title>
-  </head>
-  <body>
-    <h2>Update CSS Variables with <span class="hl">JS</span></h2>
+ <head>
+  <meta charset="UTF-8" />
+  <title>Scoped CSS Variables and JS</title>
+ </head>
+ <body>
+  <h2>Update CSS Variables with <span class="hl">JS</span></h2>
 
-    <div class="controls">
-      <label for="spacing">Spacing:</label>
-      <input
-        id="spacing"
-        type="range"
-        name="spacing"
-        min="10"
-        max="200"
-        value="10"
-        data-sizing="px"
-      />
+  <div class="controls">
+   <label for="spacing">Spacing:</label>
+   <input
+    id="spacing"
+    type="range"
+    name="spacing"
+    min="10"
+    max="200"
+    value="10"
+    data-sizing="px"
+   />
 
-      <label for="blur">Blur:</label>
-      <input
-        id="blur"
-        type="range"
-        name="blur"
-        min="0"
-        max="25"
-        value="10"
-        data-sizing="px"
-      />
+   <label for="blur">Blur:</label>
+   <input
+    id="blur"
+    type="range"
+    name="blur"
+    min="0"
+    max="25"
+    value="10"
+    data-sizing="px"
+   />
 
-      <label for="base">Base Color</label>
-      <input id="base" type="color" name="base" value="#ffc600" />
-    </div>
+   <label for="base">Base Color</label>
+   <input id="base" type="color" name="base" value="#ffc600" />
+  </div>
 
-    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
 
-    <style>
-      /* unless specific cases, define CSS variables on the highest component possible to make them accessible to all elements */
+  <style>
+   /* unless specific cases, define CSS variables on the highest component possible to make them accessible to all elements */
 
-      /* define default variables needed in root */
-      :root {
-        --base: rgb(182, 142, 142);
-        --spacing: 1rem;
-        --blur: 1rem;
-      }
+   /* define default variables needed in root */
+   :root {
+    --base: rgb(182, 142, 142);
+    --spacing: 1rem;
+    --blur: 1rem;
+   }
 
-      /*
+   /*
       misc styles, nothing to do with CSS variables
       */
 
-      body {
-        text-align: center;
-        background: #000;
-        color: white;
-        font-family: 'helvetica neue', sans-serif;
-        font-weight: 100;
-        font-size: 50px;
-      }
+   body {
+    text-align: center;
+    background: #000;
+    color: white;
+    font-family: 'helvetica neue', sans-serif;
+    font-weight: 100;
+    font-size: 50px;
+   }
 
-      .controls {
-        margin-bottom: 50px;
-      }
+   .controls {
+    margin-bottom: 50px;
+   }
 
-      input {
-        width: 100px;
-      }
+   input {
+    width: 100px;
+   }
 
-      .hl {
-        color: var(--base);
-      }
+   .hl {
+    color: var(--base);
+   }
 
-      img {
-        background: var(--base);
-        padding: var(--spacing);
-        filter: blur(var(--blur));
-      }
-    </style>
+   img {
+    background: var(--base);
+    padding: var(--spacing);
+    filter: blur(var(--blur));
+   }
+  </style>
 
-    <script>
-      //// selectors
-      const inputs = document.querySelectorAll('.controls input');
+  <script>
+   //// selectors
+   const inputs = document.querySelectorAll('.controls input');
 
-      //// callbacks
-      const handleUpdate = (evt) => {
-        const currentInput = evt.target;
+   //// callbacks
+   const handleUpdate = (evt) => {
+    const currentInput = evt.target;
+    const unitOfMeasure = currentInput.dataset.sizing || '';
 
-        // use the dataset to get the unit of measure (if any)
-        const unitOfMeasure = currentInput.dataset.sizing || '';
+    document.documentElement.style.setProperty(
+     `--${currentInput.name}`,
+     `${currentInput.value}${unitOfMeasure}`
+    );
+   };
 
-        // select the root with documentElement and setProperty based on the name of the input
-        // the first argument of setProperty will be the name of the variable
-        // the second argument will be its value
-        document.documentElement.style.setProperty(
-          `--${currentInput.name}`,
-          `${currentInput.value}${unitOfMeasure}`
-        );
-      };
-
-      //// listeners
-      // listen for both change and mousemove to make things more interactive
-      // change will react to the actual change of the input value
-      // mousemove to dragging or moving within the input
-      inputs.forEach((input) => input.addEventListener('change', handleUpdate));
-      inputs.forEach((input) =>
-        input.addEventListener('mousemove', handleUpdate)
-      );
-    </script>
-  </body>
+   //// listeners
+   inputs.forEach((input) => input.addEventListener('change', handleUpdate));
+   inputs.forEach((input) => input.addEventListener('mousemove', handleUpdate));
+  </script>
+ </body>
 </html>
