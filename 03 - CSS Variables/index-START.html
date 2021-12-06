@@ -1,51 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
+ <head>
+  <meta charset="UTF-8" />
   <title>Scoped CSS Variables and JS</title>
-</head>
-<body>
-  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+ </head>
+ <body>
+  <h2>Update CSS Variables with <span class="hl">JS</span></h2>
 
   <div class="controls">
-    <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+   <label for="spacing">Spacing:</label>
+   <input
+    id="spacing"
+    type="range"
+    name="spacing"
+    min="10"
+    max="200"
+    value="10"
+    data-sizing="px"
+   />
 
-    <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+   <label for="blur">Blur:</label>
+   <input
+    id="blur"
+    type="range"
+    name="blur"
+    min="0"
+    max="25"
+    value="10"
+    data-sizing="px"
+   />
 
-    <label for="base">Base Color</label>
-    <input id="base" type="color" name="base" value="#ffc600">
+   <label for="base">Base Color</label>
+   <input id="base" type="color" name="base" value="#ffc600" />
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500" />
 
   <style>
+   /* unless specific cases, define CSS variables on the highest component possible to make them accessible to all elements */
 
-    /*
+   :root {
+    --base: rgb(182, 142, 142);
+    --spacing: 1rem;
+    --blur: 1rem;
+   }
+
+   /*
       misc styles, nothing to do with CSS variables
-    */
+      */
 
-    body {
-      text-align: center;
-      background: #193549;
-      color: white;
-      font-family: 'helvetica neue', sans-serif;
-      font-weight: 100;
-      font-size: 50px;
-    }
+   body {
+    text-align: center;
+    background: #000;
+    color: white;
+    font-family: 'helvetica neue', sans-serif;
+    font-weight: 100;
+    font-size: 50px;
+   }
 
-    .controls {
-      margin-bottom: 50px;
-    }
+   .controls {
+    margin-bottom: 50px;
+   }
 
-    input {
-      width: 100px;
-    }
+   input {
+    width: 100px;
+   }
+
+   .hl {
+    color: var(--base);
+   }
+
+   img {
+    background: var(--base);
+    padding: var(--spacing);
+    filter: blur(var(--blur));
+   }
   </style>
 
   <script>
-  </script>
+   //// selectors
+   const inputs = document.querySelectorAll('.controls input');
 
-</body>
+   //// callbacks
+   const handleUpdate = (evt) => {
+    const currentInput = evt.target;
+    const unitOfMeasure = currentInput.dataset.sizing || '';
+
+    document.documentElement.style.setProperty(
+     `--${currentInput.name}`,
+     `${currentInput.value}${unitOfMeasure}`
+    );
+   };
+
+   //// listeners
+   inputs.forEach((input) => input.addEventListener('change', handleUpdate));
+   inputs.forEach((input) => input.addEventListener('mousemove', handleUpdate));
+  </script>
+ </body>
 </html>
