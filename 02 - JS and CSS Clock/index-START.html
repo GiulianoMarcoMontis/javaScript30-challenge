@@ -1,112 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>JS + CSS Clock</title>
-  </head>
-  <body>
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
-    </div>
+ <head>
+  <meta charset="UTF-8" />
+  <title>JS + CSS Clock</title>
+ </head>
+ <body>
+  <div class="clock">
+   <div class="clock-face">
+    <div class="hand hour-hand"></div>
+    <div class="hand min-hand"></div>
+    <div class="hand second-hand"></div>
+   </div>
+  </div>
 
-    <style>
-      html {
-        background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
-        background-size: cover;
-        font-family: 'helvetica neue';
-        text-align: center;
-        font-size: 10px;
-      }
+  <style>
+   html {
+    background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
+    background-size: cover;
+    font-family: 'helvetica neue';
+    text-align: center;
+    font-size: 10px;
+   }
 
-      body {
-        margin: 0;
-        font-size: 2rem;
-        display: flex;
-        flex: 1;
-        min-height: 100vh;
-        align-items: center;
-      }
+   body {
+    margin: 0;
+    font-size: 2rem;
+    display: flex;
+    flex: 1;
+    min-height: 100vh;
+    align-items: center;
+   }
 
-      .clock {
-        width: 30rem;
-        height: 30rem;
-        border: 20px solid white;
-        border-radius: 50%;
-        margin: 50px auto;
-        position: relative;
-        padding: 2rem;
-        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
-          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
-      }
+   .clock {
+    width: 30rem;
+    height: 30rem;
+    border: 20px solid white;
+    border-radius: 50%;
+    margin: 50px auto;
+    position: relative;
+    padding: 2rem;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+     inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+   }
 
-      .clock-face {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transform: translateY(
-          -3px
-        ); /* account for the height of the clock hands */
-      }
+   .clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-3px); /* account for the height of the clock hands */
+   }
 
-      .hand {
-        width: 50%;
-        height: 6px;
-        background: black;
-        position: absolute;
-        top: 50%;
+   .hand {
+    width: 50%;
+    height: 6px;
+    background: black;
+    position: absolute;
+    top: 50%;
 
-        /* rotate 90deg to set the hands to 12 o'clock */
-        transform: rotate(90deg);
+    /* rotate 90deg to set the hands to 12 o'clock */
+    transform: rotate(90deg);
 
-        /* bind the origin of transform to the right side of the hand */
-        transform-origin: 100%;
-        transition: all 0.5sec;
-      }
+    /* bind the origin of transform to the right side of the hand */
+    transform-origin: 100%;
+    transition: all 0.5sec;
+   }
 
-      .min-hand {
-        background: green;
-      }
+   .min-hand {
+    background: green;
+    width: 45%;
+    left: 5%;
+   }
 
-      .hour-hand {
-        background: red;
-      }
-    </style>
+   .hour-hand {
+    background: red;
+    width: 40%;
+    left: 10%;
+   }
+  </style>
 
-    <script>
-      // selectors
-      const secondsHand = document.querySelector('.second-hand');
-      const minutesHand = document.querySelector('.min-hand');
-      const hoursHand = document.querySelector('.hour-hand');
+  <script>
+   // selectors
+   const secondsHand = document.querySelector('.second-hand');
+   const minutesHand = document.querySelector('.min-hand');
+   const hoursHand = document.querySelector('.hour-hand');
 
-      const setClock = () => {
-        // use the JS Date() object to get current date and time
-        const currentDate = new Date();
+   const setClock = () => {
+    // use the JS Date() object to get current date and time
+    const currentDate = new Date();
 
-        // get the seconds, minutes, hours from Date()
-        const seconds = currentDate.getSeconds();
-        const minutes = currentDate.getMinutes();
-        const hours = currentDate.getHours();
+    // get the seconds, minutes, hours from Date()
+    const seconds = currentDate.getSeconds();
+    const minutes = currentDate.getMinutes();
+    const hours = currentDate.getHours();
 
-        // convert the values in degrees and add 90° to compensate the rotate(90deg) we have as default in style to start from 12 o'clock
-        const secondsDegree = (seconds / 60) * 360 + 90;
-        const minutesDegree = (minutes / 60) * 360 + 90;
-        const hoursDegree = (hours / 12) * 360 + 90;
+    // convert the values in degrees and add 90° to compensate the rotate(90deg) we have as default in style to start from 12 o'clock
+    const secondsDegree = (seconds / 60) * 360 + 90;
+    const minutesDegree = (minutes / 60) * 360 + 90;
+    const hoursDegree = (hours / 12) * 360 + 90;
 
-        // use the degrees to set the rotation
-        secondsHand.style.transform = `rotate(${secondsDegree}deg)`;
-        minutesHand.style.transform = `rotate(${minutesDegree}deg)`;
-        hoursHand.style.transform = `rotate(${hoursDegree}deg)`;
-      };
+    // use the degrees to set the rotation
+    secondsHand.style.transform = `rotate(${secondsDegree}deg)`;
+    minutesHand.style.transform = `rotate(${minutesDegree}deg)`;
+    hoursHand.style.transform = `rotate(${hoursDegree}deg)`;
+   };
 
-      // refresh clock every second
-      setInterval(setClock, 1000);
+   // refresh clock every second
+   setInterval(setClock, 1000);
 
-      // start the clock
-      setClock();
-    </script>
-  </body>
+   // start the clock
+   setClock();
+  </script>
+ </body>
 </html>
