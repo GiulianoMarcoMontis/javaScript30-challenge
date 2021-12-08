@@ -33,12 +33,10 @@
       const data = await res.json();
       cities = [...data];
     } catch (error) {
-      console.log(error);
       const isError = () => {
         const message = `<h2 class="errorMessage">${error}</h2>`;
         suggestions.innerHTML = message;  
       }
-
       isError();
     }
   }
