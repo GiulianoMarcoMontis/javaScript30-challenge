@@ -15,8 +15,69 @@
     </ul>
   </form>
 <script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  //// global variables
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  let cities = [];
+  let searchTerm = '';
 
+  //// selectors
+  const form = document.querySelector('.search-form');
+  const input = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+
+  //// callbacks
+  // fetchData() is async if we decide to also fetch on change or on submit for example
+  const fetchData = async (URL) => {
+    try {
+      const res = await fetch(URL);
+      const data = await res.json();
+      cities = [...data];
+    } catch (error) {
+      console.log(error);
+      const isError = () => {
+        const message = `<h2 class="errorMessage">${error}</h2>`;
+        suggestions.innerHTML = message;  
+      }
+
+      isError();
+    }
+  }
+
+  fetchData(endpoint);
+
+  const findMatch = (wordToSearch, dataToFilter) => {
+    return dataToFilter.filter(item => {
+      const regex = new RegExp(wordToSearch, 'gi');
+      return item.city.match(regex) || item.state.match(regex);
+    });
+  };
+
+  const displayResults = (evt) => {
+    evt.preventDefault();
+    searchTerm = evt.target.value;
+   
+    // if the input value is deleted reset the suggestions otherwise run findMatch()
+    const results = !searchTerm ? [] : findMatch(searchTerm, cities);
+    const resultsToDisplay = results.map(result => {
+      const regex = new RegExp(searchTerm, 'gi');
+      const cityName = result.city.replace(regex, `<span class="hl">${searchTerm}</span>`);
+      const stateName = result.state.replace(regex, `<span class="hl">${searchTerm}</span>`);
+      return `
+        <li>
+          <span class="name">${cityName}, ${stateName}</span>  
+          <span class="population">${result.population}</span> 
+        </li>
+      `;
+    }).join('');
+
+    suggestions.innerHTML = resultsToDisplay;  
+  };
+
+
+  //// listeners
+  input.addEventListener('keyup', displayResults);
+  input.addEventListener('change', displayResults);
+  form.addEventListener('submit', displayResults);
 </script>
 </body>
 </html>

@@ -72,3 +72,7 @@ span.population {
 .hl {
   background: #ffc600;
 }
+
+.errorMessage{
+  color: red;
+}
