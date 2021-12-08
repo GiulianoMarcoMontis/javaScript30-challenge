@@ -56,6 +56,7 @@
    
     // if the input value is deleted reset the suggestions otherwise run findMatch()
     const results = !searchTerm ? [] : findMatch(searchTerm, cities);
+    
     const resultsToDisplay = results.map(result => {
       const regex = new RegExp(searchTerm, 'gi');
       const cityName = result.city.replace(regex, `<span class="hl">${searchTerm}</span>`);
