@@ -129,11 +129,11 @@
     const panels = document.querySelectorAll('.panel');
 
     //// callbacks
-    const handleOpenPanel = function () {
+    function handleOpenPanel() {
       this.classList.toggle('open');
     };
 
-    const handleTextTransition = function (evt) {
+    function handleTextTransition(evt) {
       // see above compatibility with flex vs flex-grow based on browser
       evt.propertyName.includes('flex') ? this.classList.toggle('open-active') : '';
     };
