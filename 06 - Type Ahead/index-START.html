@@ -19,30 +19,23 @@
   const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
   let cities = [];
  
-
   //// selectors
   const form = document.querySelector('.search-form');
   const input = document.querySelector('.search');
   const suggestions = document.querySelector('.suggestions');
 
   //// callbacks
-  // fetchData() is async if we decide to also fetch on change or on submit for example
-  const fetchData = async (URL) => {
-    try {
-      const res = await fetch(URL);
-      const data = await res.json();
-      cities = [...data];
-    } catch (error) {
+    fetch(endpoint)
+    .then(res => res.json())
+    .then(data => cities = [...data])
+    .catch(error => {
       const isError = () => {
         const message = `<h2 class="errorMessage">${error}</h2>`;
         suggestions.innerHTML = message;  
       }
       isError();
-    }
-  }
-
-  fetchData(endpoint);
-
+    });
+  
   function findMatch (wordToSearch, dataToFilter) {
     return dataToFilter.filter(item => {
       const regex = new RegExp(wordToSearch, 'gi');
@@ -71,7 +64,6 @@
 
     suggestions.innerHTML = resultsToDisplay;  
   };
-
 
   //// listeners
   input.addEventListener('keyup', displayResults);
