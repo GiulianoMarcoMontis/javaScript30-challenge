@@ -18,7 +18,7 @@
   //// global variables
   const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
   let cities = [];
-  let searchTerm = '';
+ 
 
   //// selectors
   const form = document.querySelector('.search-form');
@@ -43,7 +43,7 @@
 
   fetchData(endpoint);
 
-  const findMatch = (wordToSearch, dataToFilter) => {
+  function findMatch (wordToSearch, dataToFilter) {
     return dataToFilter.filter(item => {
       const regex = new RegExp(wordToSearch, 'gi');
       return item.city.match(regex) || item.state.match(regex);
@@ -52,15 +52,15 @@
 
   const displayResults = (evt) => {
     evt.preventDefault();
-    searchTerm = evt.target.value;
+    let searchTerm = evt.target.value;
    
     // if the input value is deleted reset the suggestions otherwise run findMatch()
     const results = !searchTerm ? [] : findMatch(searchTerm, cities);
     
     const resultsToDisplay = results.map(result => {
       const regex = new RegExp(searchTerm, 'gi');
-      const cityName = result.city.replace(regex, `<span class="hl">${searchTerm}</span>`);
-      const stateName = result.state.replace(regex, `<span class="hl">${searchTerm}</span>`);
+      const cityName = result.city.replace(regex, `<mark>${searchTerm}</mark>`);
+      const stateName = result.state.replace(regex, `<mark>${searchTerm}</mark>`);
       return `
         <li>
           <span class="name">${cityName}, ${stateName}</span>  
