@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <button class="clearCanvas">Clear Canvas</button>
+    <script>
+        //// classes
+        class DrawingCanvas {
+            constructor(id, contextID = '2d') {
+                this.canvas = document.querySelector(id);
+                this.context = this.canvas.getContext(contextID)
+                this.X = 0;
+                this.Y = 0;
+                this.hue = 0;
+                this.isDrawing = false;
+                this.isStrokeGrowing = true;
+
+                //// binding this to events
+                this.startDrawing = this.startDrawing.bind(this);
+                this.stopDrawing = this.stopDrawing.bind(this);
+                this.clearCanvas = this.clearCanvas.bind(this);
+                this.draw = this.draw.bind(this);
+            }
+
+            setCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.context.strokeStyle = '#000';
+                this.context.lineJoin = 'miter';
+                this.context.lineCap = 'round';
+                this.context.lineWidth = 1;
+            }
+
+            updateCoordinates() {
+                this.X = this.offsetX;
+                this.Y = this.offsetY;
+            };
+
+            startDrawing() {
+                this.isDrawing = true;
+            };
+
+            stopDrawing() {
+                this.isDrawing = false;
+            };
+
+            clearCanvas() {
+                // Note: make sure to use beginPath() when starting the new line in draw() or clearRect() could give side effects
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.context.lineWidth = 1;
+                this.hue = 0;
+            };
+
+            draw(evt) {
+                if (!this.isDrawing) return;
+                
+                // Note: do not remove beginPath() due to side effects of clearRect() in clearCanvas()
+                this.context.strokeStyle = `hsl(${this.hue}, 100%, 50%)`;
+                this.context.beginPath();
+                this.context.moveTo(this.X, this.Y);
+                this.context.lineTo(evt.offsetX, evt.offsetY);
+                this.context.stroke();
+                
+                this.X = evt.offsetX;
+                this.Y = evt.offsetY;
+                
+                this.hue++;
+                if (this.hue >= 360) this.hue = 0;
+                if (this.context.lineWidth >= 100 || this.context.lineWidth <= 1) this.isStrokeGrowing = !this.isStrokeGrowing;
+                if (this.isStrokeGrowing) this.context.lineWidth++;
+                else this.context.lineWidth--;
+            };
+        };
+
+        //// selectors
+        const button = document.querySelector('.clearCanvas');
+        
+        //// init
+        const myCanvas = new DrawingCanvas('#draw');
+        myCanvas.setCanvas();
+
+        //// listeners
+        myCanvas.canvas.addEventListener('mousedown', () => {
+            myCanvas.startDrawing();
+            myCanvas.updateCoordinates();
+        });
+        myCanvas.canvas.addEventListener('mousemove', myCanvas.draw);
+        myCanvas.canvas.addEventListener('mouseup', myCanvas.stopDrawing);
+        myCanvas.canvas.addEventListener('mouseout', myCanvas.stopDrawing);
+        button.addEventListener('click', myCanvas.clearCanvas);
+    </script>
+
+    <style>
+      :root {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body{
+        position: relative;
+      }
+
+      button {
+        border: none;
+        border-radius: 1rem;
+        background-color: deeppink;
+        color: white;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        
+        transition: all .8s;
+
+        position: absolute;
+        bottom: 5rem;
+        left: 5rem;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+      }
+    </style>
+  </body>
+</html>
