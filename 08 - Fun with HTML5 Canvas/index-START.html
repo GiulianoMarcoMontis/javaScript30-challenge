@@ -8,10 +8,10 @@
     <canvas id="draw" width="800" height="800"></canvas>
     <script>
       //// global variables
-      let isDrawing = false;
       let X = 0;
       let Y = 0;
       let hue = 0;
+      let isDrawing = false;
       let isStrokeGrowing = true;
 
       //// selectors
@@ -21,8 +21,6 @@
       const context = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
-      //// stroke/line settings
       context.strokeStyle = '#000';
       context.lineJoin = 'miter';
       context.lineCap = 'round';
@@ -37,9 +35,7 @@
       //// callbacks
       function render(evt) {
         if (!isDrawing) return;
-        console.log(evt);
         
-        // to draw lines: begin path; from x,y; to evt.x, evt.y; draw stroke()
         context.strokeStyle = `hsl(${hue}, 100%, 50%)`;
         context.beginPath();
         context.moveTo(X, Y);
@@ -64,15 +60,11 @@
       canvas.addEventListener('mousemove', render);
       canvas.addEventListener('mouseup', () => isDrawing = false);
       canvas.addEventListener('mouseout', () => isDrawing = false);
-
-
     </script>
-
     <style>
       html, body {
         margin: 0;
       }
     </style>
-
   </body>
 </html>
