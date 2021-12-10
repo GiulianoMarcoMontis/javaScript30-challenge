@@ -16,7 +16,7 @@
   </form>
 <script>
   //// global variables
-  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const endpoint = 'https://gistgithubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
   let cities = [];
  
   //// selectors
@@ -29,11 +29,8 @@
     .then(res => res.json())
     .then(data => cities = [...data])
     .catch(error => {
-      const isError = () => {
-        const message = `<h2 class="errorMessage">${error}</h2>`;
+        const message = `<h2 class="errorMessage">Fetch Error: ${error.message}</h2>`;
         suggestions.innerHTML = message;  
-      }
-      isError();
     });
   
   function findMatch (wordToSearch, dataToFilter) {
