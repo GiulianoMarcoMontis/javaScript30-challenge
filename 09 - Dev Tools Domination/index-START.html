@@ -18,29 +18,62 @@
     }
 
     // Regular
+    console.log('hola!');
 
     // Interpolated
+    console.log('hello %s', 'world!');
 
     // Styled
+    console.log('%c I can style logs', 'border: 0.1rem solid black;')
 
     // warning!
+    console.warn('warning you are going to explode in .1ms');
 
     // Error :|
+    console.error('you exploded!!');
 
     // Info
+    console.info('it was a joke you did not explode!');
 
     // Testing
+    console.assert(1 === 2, 'nope! this is wrong');
 
     // clearing
+    // console.clear();
 
     // Viewing DOM Elements
+    const paragraph = document.querySelector('p');
+    console.log(paragraph);
+    console.dir(paragraph);
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+        console.log(`${dog.name}`);
+        console.log(`${dog.age}`);
+      console.groupEnd(`${dog.name}`);
+    });
 
     // counting
+    console.count('Sheep');
+    console.count('Sheep');
+    console.count('Sheep');
+    console.count('Sheep');
+    console.count('Sheep');
 
     // timing
+    console.time('fetch gitHub data');
+    fetch('https://api.github.com/users/GiulianoMarcoMontis')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetch gitHub data');
+        console.log(data);
+      });
 
+
+      // table
+      console.table(dogs);
+      
   </script>
 </body>
 </html>
