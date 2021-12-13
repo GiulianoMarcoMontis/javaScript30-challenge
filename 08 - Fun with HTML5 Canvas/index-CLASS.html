@@ -10,29 +10,37 @@
     <script>
         //// classes
         class DrawingCanvas {
-            constructor(id, contextID = '2d') {
+            //// id
+            // pass the id of the canvas html element
+
+            //// contextType
+            // '2d' => create object for 2d rendering context
+            // 'webgl' => create object for 3d rendering context (only compatible with WebGL version 1 browsers)
+            // 'wbg12' => create object for 3d rendering context (only compatible with WebGL version 2 browsers) 
+            // 'bitmaprenderer' => create object for replacing canvas content with ImageBitmap
+
+            constructor(id, contextType = '2d') {
                 this.canvas = document.querySelector(id);
-                this.context = this.canvas.getContext(contextID)
+                this.context = this.canvas.getContext(contextType)
                 this.X = 0;
                 this.Y = 0;
                 this.hue = 0;
                 this.isDrawing = false;
                 this.isStrokeGrowing = true;
 
-                //// binding this to events
-                this.startDrawing = this.startDrawing.bind(this);
-                this.stopDrawing = this.stopDrawing.bind(this);
-                this.clearCanvas = this.clearCanvas.bind(this);
-                this.draw = this.draw.bind(this);
-            }
-
-            setCanvas() {
+                //// set canvas, line and stroke
                 this.canvas.width = window.innerWidth;
                 this.canvas.height = window.innerHeight;
                 this.context.strokeStyle = '#000';
                 this.context.lineJoin = 'miter';
                 this.context.lineCap = 'round';
                 this.context.lineWidth = 1;
+
+                //// binding this to events
+                this.startDrawing = this.startDrawing.bind(this);
+                this.stopDrawing = this.stopDrawing.bind(this);
+                this.clearCanvas = this.clearCanvas.bind(this);
+                this.draw = this.draw.bind(this);
             }
 
             updateCoordinates() {
@@ -81,7 +89,6 @@
         
         //// init
         const myCanvas = new DrawingCanvas('#draw');
-        myCanvas.setCanvas();
 
         //// listeners
         myCanvas.canvas.addEventListener('mousedown', () => {
