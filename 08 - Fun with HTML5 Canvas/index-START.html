@@ -4,16 +4,67 @@
   <meta charset="UTF-8">
   <title>HTML5 Canvas</title>
 </head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      //// global variables
+      let X = 0;
+      let Y = 0;
+      let hue = 0;
+      let isDrawing = false;
+      let isStrokeGrowing = true;
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+      //// selectors
+      const canvas = document.querySelector('#draw');
 
-</body>
+      //// canvas settings
+      const context = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      context.strokeStyle = '#000';
+      context.lineJoin = 'miter';
+      context.lineCap = 'round';
+      context.lineWidth = 20;
+
+      //// methods
+      function updateCoordinates() {
+        X = this.offsetX;
+        Y = this.offsetY;
+      };
+
+      //// callbacks
+      function render(evt) {
+        if (!isDrawing) return;
+        
+        context.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+        context.beginPath();
+        context.moveTo(X, Y);
+        context.lineTo(evt.offsetX, evt.offsetY);
+        context.stroke();
+        
+        X = evt.offsetX;
+        Y = evt.offsetY;
+        
+        hue++;
+        if (hue >= 360) hue = 0;
+        if (context.lineWidth >= 100 || context.lineWidth <= 1) isStrokeGrowing = !isStrokeGrowing;
+        if (isStrokeGrowing) context.lineWidth++;
+        else context.lineWidth--;
+      };
+
+      //// listeners
+      canvas.addEventListener('mousedown', () => {
+        isDrawing = true;
+        updateCoordinates();
+      });
+      canvas.addEventListener('mousemove', render);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mouseout', () => isDrawing = false);
+    </script>
+    <style>
+      html, body {
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>
