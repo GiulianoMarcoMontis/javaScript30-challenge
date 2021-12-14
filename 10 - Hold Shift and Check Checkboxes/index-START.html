@@ -96,6 +96,33 @@
   </div>
 
 <script>
+  //// global variables
+  let selectedInput;
+
+  //// selectors
+  const checkboxes = document.querySelectorAll('.item input');
+  
+  //// callbacks
+  function selectItems(evt) {
+    let isAmongTheSelected = false;
+
+    if (evt.shiftKey && this.checked) {
+      checkboxes.forEach(checkbox => {
+        if (checkbox === this || checkbox === selectedInput) {
+          isAmongTheSelected = !isAmongTheSelected;
+        };
+        if (isAmongTheSelected) checkbox.checked = true;
+      });
+    };
+
+    selectedInput = this;
+  };
+
+  //// listeners
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', selectItems);
+  });
+  
 </script>
 </body>
 </html>
