@@ -108,9 +108,7 @@
 
     if (evt.shiftKey && this.checked) {
       checkboxes.forEach(checkbox => {
-        if (checkbox === this || checkbox === selectedInput) {
-          isAmongTheSelected = !isAmongTheSelected;
-        };
+        if (checkbox === this || checkbox === selectedInput) isAmongTheSelected = !isAmongTheSelected;
         if (isAmongTheSelected) checkbox.checked = true;
       });
     };
