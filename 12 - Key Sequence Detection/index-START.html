@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Key Detection</title>
-  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
-</head>
-<body>
-<script>
-</script>
-</body>
-</html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Key Detection</title>
+      <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+    </head>
+    <body>
+      <script>
+        //// global variables
+        const secretSequence = 'pepperoni Pizza';
+        const currentSequence = [];
+        
+
+        //// callbacks
+        const keyDetector = (evt) => {
+          const badKeys = ['Shift', 'CapsLock', 'Dead', 'Control', 'Alt', 'Meta', 'Backspace'];
+
+          if (!badKeys.includes(evt.key)) currentSequence.push(evt.key);
+          currentSequence.splice(-secretSequence.length - 1, currentSequence.length - secretSequence.length);
+          if (currentSequence.join('').includes(secretSequence)) cornify_add();
+        }
+
+        //// listeners
+        window.addEventListener('keyup', keyDetector)
+
+      </script>
+    </body>
+  </html>
