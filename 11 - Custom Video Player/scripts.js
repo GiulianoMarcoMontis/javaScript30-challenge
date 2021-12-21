@@ -11,13 +11,16 @@ class CustomVideoPlayer {
         this.mouseDown = false;
     };
 
-    playPause = () => {
-        if (this.video.paused) this.video.play();
-        else this.video.pause();
-      };
+    playPause = (evt) => {
+        if (evt.target === this.toggle || evt.target === this.video) {
+            if (this.video.paused) this.video.play();
+            else this.video.pause();
+        } else return;
+    };
 
     toggleIcon = (evt) => {
-        this.toggle.textContent = evt.target.paused ? '►' : '❚ ❚';
+        console.log(evt, this.video.pause);
+        this.toggle.textContent = this.video.paused ? '►' : '❚ ❚';
     };
     
     skipSeconds = (evt) => {
@@ -37,7 +40,7 @@ class CustomVideoPlayer {
     dragProgress = (evt) => {
         const scrubTime = (evt.offsetX / this.progress.offsetWidth) * this.video.duration;
         this.video.currentTime = scrubTime;
-      };
+    };
 
     toggleMouseDown = () => {
         this.mouseDown = !this.mouseDown;
@@ -82,8 +85,8 @@ const newVideoPlayer = new CustomVideoPlayer('.player');
 
 //// listeners
 // play-pause handlers
-newVideoPlayer.video.addEventListener('click', newVideoPlayer.playPause);
-newVideoPlayer.toggle.addEventListener('click', newVideoPlayer.playPause);
+newVideoPlayer.player.addEventListener('click', newVideoPlayer.playPause);
+//newVideoPlayer.toggle.addEventListener('click', newVideoPlayer.playPause);
 newVideoPlayer.video.addEventListener('play', newVideoPlayer.toggleIcon);
 newVideoPlayer.video.addEventListener('pause', newVideoPlayer.toggleIcon);
 
