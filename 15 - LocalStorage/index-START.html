@@ -26,13 +26,58 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  class customStoredList {
+    constructor(wrapperClass) {
+      this.wrapper = document.querySelector(wrapperClass);
+      this.addItems = this.wrapper.querySelector('.add-items');
+      this.itemsList = this.wrapper.querySelector('.plates');
+      this.savedItems = localStorage.getItem('items');
+      this.items = this.savedItems ? JSON.parse(this.savedItems) : [];
 
+      this.renderList(this.items, this.itemsList);
+      this.addItems.addEventListener('submit', this.handleSubmit);
+      this.itemsList.addEventListener('click', this.toggleChecked);
+    };
+
+    renderList = (itemsArray = [], selector) => {
+      selector.innerHTML = itemsArray.map((item, i) => {
+        return `
+          <li>
+            <input type="checkbox" data-index="${i}" id="item${i}" ${item.eaten ? 'checked' : ''} /> 
+            <label for="item${i}">${item.text}</label>  
+          </li>
+        `;
+      }).join('');
+    };
+
+    handleSubmit = (evt) => {
+      evt.preventDefault();
+
+      const input = evt.target.querySelector('[name=item]');
+      const itemToAdd = {
+        text: input.value,
+        eaten: false,
+      };
+      
+      this.items.push(itemToAdd);
+      localStorage.setItem('items', JSON.stringify(this.items));
+      this.renderList(this.items, this.itemsList);
+      input.value = '';
+    }; 
+
+    toggleChecked = (evt) => {
+      if (!evt.target.matches('input')) return;
+      const el = evt.target;
+      const index = el.dataset.index;
+      this.items[index].eaten = !this.items[index].eaten;
+
+      localStorage.setItem('items', JSON.stringify(this.items));
+      this.renderList(this.items, this.itemsList);
+    };
+  };
+  
+  const newCustomList = new customStoredList('.wrapper');  
 </script>
-
 
 </body>
 </html>
-
