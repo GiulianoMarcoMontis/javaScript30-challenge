@@ -1,5 +1,6 @@
 class CustomVideoPlayer {
     constructor(selector) {
+        //// selectors
         this.player = document.querySelector(selector);
         this.video = this.player.querySelector('.viewer');
         this.progress = this.player.querySelector('.progress');
@@ -9,6 +10,27 @@ class CustomVideoPlayer {
         this.ranges = this.player.querySelectorAll('.player__slider');
         this.fullScreenToggle = this.player.querySelector('.fullScreenToggle');
         this.mouseDown = false;
+
+        //// listeners
+        // play-pause handlers
+        this.player.addEventListener('click', this.playPause);
+        this.video.addEventListener('play', this.toggleIcon);
+        this.video.addEventListener('pause', this.toggleIcon);
+
+        // volume and speed handlers 
+        this.ranges.forEach(range => range.addEventListener('change', this.handleRanges));
+        this.ranges.forEach(range => range.addEventListener('mousemove', this.handleRanges));
+
+        // skip, progress and time handlers
+        this.skipButtons.forEach(skipButton => skipButton.addEventListener('click', this.skipSeconds));
+        this.video.addEventListener('timeupdate', this.handleTime);
+        this.progress.addEventListener('click', this.dragProgress);
+        this.progress.addEventListener('mousemove', () => this.mouseDown && this.dragProgress);
+        this.progress.addEventListener('mousedown', this.toggleMouseDown);
+        this.progress.addEventListener('mouseup', this.toggleMouseDown);
+
+        // fullscreen handler
+        this.fullScreenToggle.addEventListener('click', this.handleFullScreen)
     };
 
     playPause = (evt) => {
@@ -19,7 +41,6 @@ class CustomVideoPlayer {
     };
 
     toggleIcon = (evt) => {
-        console.log(evt, this.video.pause);
         this.toggle.textContent = this.video.paused ? '►' : '❚ ❚';
     };
     
@@ -82,25 +103,3 @@ class CustomVideoPlayer {
 
 //// class init
 const newVideoPlayer = new CustomVideoPlayer('.player');
-
-//// listeners
-// play-pause handlers
-newVideoPlayer.player.addEventListener('click', newVideoPlayer.playPause);
-//newVideoPlayer.toggle.addEventListener('click', newVideoPlayer.playPause);
-newVideoPlayer.video.addEventListener('play', newVideoPlayer.toggleIcon);
-newVideoPlayer.video.addEventListener('pause', newVideoPlayer.toggleIcon);
-
-// volume and speed handlers 
-newVideoPlayer.ranges.forEach(range => range.addEventListener('change', newVideoPlayer.handleRanges));
-newVideoPlayer.ranges.forEach(range => range.addEventListener('mousemove', newVideoPlayer.handleRanges));
-
-// skip, progress and time handlers
-newVideoPlayer.skipButtons.forEach(skipButton => skipButton.addEventListener('click', newVideoPlayer.skipSeconds));
-newVideoPlayer.video.addEventListener('timeupdate', newVideoPlayer.handleTime);
-newVideoPlayer.progress.addEventListener('click', newVideoPlayer.dragProgress);
-newVideoPlayer.progress.addEventListener('mousemove', () => newVideoPlayer.mouseDown && newVideoPlayer.dragProgress);
-newVideoPlayer.progress.addEventListener('mousedown', newVideoPlayer.toggleMouseDown);
-newVideoPlayer.progress.addEventListener('mouseup', newVideoPlayer.toggleMouseDown);
-
-// fullscreen handler
-newVideoPlayer.fullScreenToggle.addEventListener('click', newVideoPlayer.handleFullScreen)
